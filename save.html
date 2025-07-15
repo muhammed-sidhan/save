@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Minimal File Viewer</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      margin: 40px auto;
+      max-width: 600px;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+
+    h2 {
+      font-size: 1.5em;
+      margin-bottom: 1em;
+      text-align: center;
+    }
+
+    input[type="file"] {
+      display: block;
+      margin: 0 auto 20px auto;
+      padding: 10px;
+    }
+
+    .file-item {
+      background: #fff;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .file-item img {
+      max-width: 100%;
+      margin-top: 10px;
+      border-radius: 6px;
+    }
+
+    .download-link {
+      display: inline-block;
+      margin-top: 10px;
+      text-decoration: none;
+      color: #007bff;
+      font-weight: 500;
+      font-size: 0.95em;
+    }
+
+    .download-link:hover {
+      text-decoration: underline;
+    }
+
+    .file-name {
+      font-weight: 600;
+    }
+
+    .file-size {
+      font-size: 0.9em;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <h2>📁 Minimal File Viewer & Saver</h2>
+  <input type="file" id="fileInput" multiple />
+  <div id="fileList"></div>
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const fileList = document.getElementById('fileList');
+
+    fileInput.addEventListener('change', () => {
+      fileList.innerHTML = '';
+      const files = fileInput.files;
+
+      Array.from(files).forEach(file => {
+        const container = document.createElement('div');
+        container.className = 'file-item';
+
+        const name = document.createElement('div');
+        name.className = 'file-name';
+        name.textContent = file.name;
+
+        const size = document.createElement('div');
+        size.className = 'file-size';
+        size.textContent = `Size: ${Math.round(file.size / 1024)} KB`;
+
+        container.appendChild(name);
+        container.appendChild(size);
+
+        if (file.type.startsWith('image/')) {
+          const img = document.createElement('img');
+          img.src = URL.createObjectURL(file);
+          container.appendChild(img);
+        }
+
+        const link = document.createElement('a');
+        link.className = 'download-link';
+        link.href = URL.createObjectURL(file);
+        link.download = file.name;
+        link.textContent = '⬇️ Download';
+        container.appendChild(link);
+
+        fileList.appendChild(container);
+      });
+    });
+  </script>
+</body>
+</html>
